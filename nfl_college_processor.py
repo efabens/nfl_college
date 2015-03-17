@@ -62,14 +62,14 @@ def longest_ever_t(team_dict):
     return max_teams
 
 
-def xl_longest_ever_t(all_teams, sheet):
+def xl_longest_ever_t(all_teams, sheet, func=longest_ever_t):
     sheet.write(0, 0, 'Data Retrieved 3/13/2015 from footballdb.com')
     a, b = 1, 0
     for i, j in enumerate(['Team', 'Years', 'College', 'Start -->']):
         sheet.write(a, i, j)
     a+=1
     for i in all_teams:
-        m = longest_ever_t(all_teams[i])
+        m = func(all_teams[i])
         sheet.write(a, b, i)
         b += 1
         for j in m:
@@ -85,7 +85,24 @@ def xl_longest_ever_t(all_teams, sheet):
 
 
 def most_years_t(team_dict):
+    e = sorted(team_dict.keys(), reverse=True)
+    max_years = 0
+    max_teams = []
+    current = defaultdict(int)
+    for i in e:
+        temp = set(team_dict[i])
+        for j in temp:
+            current[j] += 1
+            if current[j] > max_years:
+                max_teams = [[j, current[j], i]]
+                max_years = current[j]
+            elif current[j] == max_years:
+                max_teams.append([j, current[j], i])
+    return max_teams
+
+def college_years(all_teams, sheet, uni=True):
     pass
+
 
 if __name__ == "__main__":
     with open("all_teams3.json", 'r') as outfile:
@@ -96,5 +113,8 @@ if __name__ == "__main__":
 
     l_ever_team = book.add_worksheet("Longest Tenure ever")
     xl_longest_ever_t(all_teams, l_ever_team)
+
+    most_years_sheet = book.add_worksheet("Most Seasons on Team")
+    xl_longest_ever_t(all_teams, most_years_sheet, func=most_years_t)
 
     book.close()
