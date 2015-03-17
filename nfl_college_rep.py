@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup as bs
 import urllib2
 import re
 import json
+from os.path import isfile
 
 # get list of current teams (list)
 
@@ -66,15 +67,13 @@ def current(url):
     return list(t)
 
 
-# within each season get each college that is listed (list)
-
-
-# create something that visualizes this is some manner
-
 if __name__ == '__main__':
     f = get_teams()
-    with open("all_teams2.json", 'r') as outfile:
-        full_list = json.load(outfile)
+    if isfile('all_teams2.json'):
+        with open("all_teams2.json", 'r') as outfile:
+            full_list = json.load(outfile)
+    else:
+        full_list = {}
     for i, j in f.iteritems():
         t = get_years(j, start=2014)
         for k in t:
@@ -82,5 +81,3 @@ if __name__ == '__main__':
             full_list[i][str(m)] = n
     with open('all_teams3.json', 'w') as outfile:
         json.dump(full_list, outfile, sort_keys=True, indent=4)
-    # f=get_years('http://www.footballdb.com/teams/nfl/buffalo-bills/roster')
-    # f=get_schools('http://www.footballdb.com/teams/afl/buffalo-bills/roster')
