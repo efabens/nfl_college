@@ -58,18 +58,30 @@ def longest_ever_t(team_dict):
                 elif current[j] == max_years:
                     max_teams.append([j, current[j], i])
             else:
-                current[j]=0
+                current[j] = 0
     return max_teams
 
 
 def xl_longest_ever_t(all_teams, sheet):
     sheet.write(0, 0, 'Data Retrieved 3/13/2015 from footballdb.com')
     a, b = 1, 0
-    for i, j in enumerate(['Team', 'College', 'Start', 'Years -->'])
-        sheet.write(1, i, j)
+    for i, j in enumerate(['Team', 'Years', 'College', 'Start -->']):
+        sheet.write(a, i, j)
+    a+=1
     for i in all_teams:
-        print i, longest_ever_t(all_teams[i])
-
+        m = longest_ever_t(all_teams[i])
+        sheet.write(a, b, i)
+        b += 1
+        for j in m:
+            if b == 1:
+                sheet.write(a, b, j[1])
+                b+=1
+            sheet.write(a, b, j[0])
+            b+=1
+            sheet.write(a, b, int(j[2]))
+            b += 1
+        b = 0
+        a += 1
 
 
 def most_years_t(team_dict):
