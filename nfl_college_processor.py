@@ -101,7 +101,14 @@ def most_years_t(team_dict):
     return max_teams
 
 def college_years(all_teams, sheet, uni=True):
-    pass
+    p=defaultdict(lambda: defaultdict(int))
+    for i, j in all_teams.iteritems():
+        for k, l in j.iteritems():
+            for m in l:
+                p[m][k]+=1
+    return p
+
+
 
 
 if __name__ == "__main__":
@@ -116,5 +123,7 @@ if __name__ == "__main__":
 
     most_years_sheet = book.add_worksheet("Most Seasons on Team")
     xl_longest_ever_t(all_teams, most_years_sheet, func=most_years_t)
+
+    r = college_years(all_teams, [])
 
     book.close()
